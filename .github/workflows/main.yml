@@ -1,0 +1,25 @@
+name: Executar script diariamente
+
+on:
+  schedule:
+    - cron: '0 08 * * *' 
+  workflow_dispatch: 
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+
+      - name: Executar script
+        run: python main.py 
