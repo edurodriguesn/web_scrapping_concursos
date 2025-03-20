@@ -41,7 +41,6 @@ def extrair_data(texto):
         if data_tentativa.count("/") == 2:  # Verifica se contém duas barras (formato dd/mm/yyyy)
             try:
                 # Tenta converter para data
-                print(data_tentativa)
                 return datetime.strptime(data_tentativa, "%d/%m/%Y")
             except ValueError:
                 continue  # Se a conversão falhar, tenta a próxima sequência
