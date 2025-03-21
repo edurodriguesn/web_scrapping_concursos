@@ -2,28 +2,32 @@ import scraper
 import organizar_resultado as organizador
 import requests
 from datetime import datetime
+import unicodedata
 
 # Configurações
 ARQUIVO_BACKUP = "concursos_backup.txt"
 TOKEN_BOT = "7829942554:AAFuapRP-53eW0o54IOG7f3PavZr-jIH30U"
 CHAT_ID = 2081844601
 
-ESTADOS_INTERESSE = ["AP", "SC", "PA", "PR", "NACIONAL"]
+ESTADOS_INTERESSE = ["AP", "PA", "GO", "MT", "MS", "PB", "MG", "SC", "RS", "PR", "NACIONAL"]
+
 CARGOS_TI = [
-    "tecnologia da informação", "informática", "sistema", "computação", "desenvolvimento", "desenvolvedor",
-    "segurança da informação", "banco de dados", "redes", "suporte técnico", "programação", "programador",
-    "engenharia de software", "arquitetura de software", "infraestrutura de ti", "suporte de ti",
-    "analista de ti", "cientista de dados", "inteligência artificial", "ciência de dados", "aprendizado de máquina",
-    "governança de ti", "gestão de projetos de ti", "gestão de riscos de ti",
-    "computação em nuvem", "forense digital", "big data", "automação", "devops"
+    "tecnologia da informacao", "informatica", "sistema", "computacao", "desenvolvimento de", "analisa de desenvolvimento", 
+    "tecnico em desenvolvimento", "especialista em desenvolvimento", "engenheiro de desenvolvimento", "desenvolvedor", "seguranca da informacao", "banco de dados", 
+    "redes", "suporte tecnico", "programacao", "programador", "engenharia de software", "arquitetura de software", "infraestrutura de ti", 
+    "suporte de ti", "analista de ti", "cientista de dados", "inteligencia artificial", "ciencia de dados", "aprendizado de maquina",
+    "governanca de ti", "gestao de projetos de ti", "gestao de riscos de ti", "computacao em nuvem", "forense digital", "tecnologista", "tecnologic",
+    "big data", "automacao", "devops", "analise de dados", "analista de dados"
 ]
+
 TERMOS_EXCLUIR = [
-    "informática básica", "noções de informática", "informática para iniciantes", "conceitos de informática", 
-    "conhecimentos em informática", "cursos de informática", ", informática", "informática nível básico", 
-    "informática nível iniciante", "informática fundamental", "nível básico em informática",
-    "básico em informática", "básico de informática", "básicos em informática", "básicos de informática", 
-    "iniciante em informática", "iniciante de informática"
+    "informatica basica", "nocoes de informatica", "informatica para iniciantes", "conceitos de informatica", 
+    "conhecimentos em informatica", "cursos de informatica", ", informatica", "informatica nivel basico", 
+    "informatica nivel iniciante", "informatica fundamental", "nivel basico em informatica",
+    "basico em informatica", "basico de informatica", "basicos em informatica", "basicos de informatica", 
+    "iniciante em informatica", "iniciante de informatica"
 ]
+
 
 # Função para enviar mensagem no Telegram
 def enviar_telegram(mensagem):
@@ -45,8 +49,8 @@ def extrair_data(texto):
                 continue
     return None 
 
-
 def main():
+    print("Buscando concursos...")
     concursos = scraper.obter_concursos()
     concursos_encontrados = {}
     
@@ -69,6 +73,8 @@ def main():
                     continue
                 
                 detalhes = scraper.obter_detalhes_concurso(link)
+                detalhes = ''.join(c for c in unicodedata.normalize('NFD', detalhes) if unicodedata.category(c) != 'Mn')
+
                 if any(cargo in detalhes for cargo in CARGOS_TI) and not any(termo in detalhes for termo in TERMOS_EXCLUIR):
                     if estado not in concursos_encontrados:
                         concursos_encontrados[estado] = []
@@ -88,6 +94,7 @@ def main():
             mensagem_telegram += "\n"
     
     if mensagem_telegram:
+        print("Concursos encontrados. Enviando mensagem no Telegram...")
         enviar_telegram(mensagem_telegram.strip())
     else:
         print("Nenhuma alteração nos concursos.")
