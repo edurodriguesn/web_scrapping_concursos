@@ -1,5 +1,5 @@
-import scraper
-import organizar_resultado as organizador
+import concursos.scraper as scraper
+import concursos.organizar_resultado as organizador
 import requests
 from datetime import datetime
 import unicodedata
