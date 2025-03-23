@@ -12,7 +12,14 @@ CHAT_ID = 2081844601
 ESTADOS_INTERESSE = ["AP", "PA", "GO", "MT", "MS", "PB", "MG", "SC", "RS", "PR", "NACIONAL"]
 
 CARGOS_TI = [
-    "tecnologia da informacao", "informatica", "sistema", "computacao", "desenvolvimento de", "analisa de desenvolvimento", 
+    "tecnologia da informacao", "informatica", "analista de sistema", "análise de sistema", "análise em sistema",  
+    "arquiteto de sistema", "arquitetura de sistema", "desenvolvedor de sistema", "desenvolvimento de sistema",  
+    "engenheiro de sistema", "engenharia de sistema", "especialista em sistema", "especialidade em sistema",  
+    "gerente de sistema", "gerenciamento de sistema", "gestão de sistema", "coordenador de sistema", "coordenação de sistema",  
+    "técnico de sistema", "técnica de sistema", "consultor de sistema", "consultoria de sistema", "administrador de sistema", "administração de sistema",  
+    "programador de sistema", "programação de sistema", "suporte de sistema",  "testador de sistema", "testes de sistema", "testagem de sistema",  
+    "auditor de sistema", "auditoria de sistema",  "operador de sistema", "operação de sistema",  "cientista de sistema", "ciência de sistema",  
+    "líder de sistema", "liderança de sistema", "computacao", "desenvolvimento de", "analisa de desenvolvimento", 
     "tecnico em desenvolvimento", "especialista em desenvolvimento", "engenheiro de desenvolvimento", "desenvolvedor", "seguranca da informacao", "banco de dados", 
     "redes", "suporte tecnico", "programacao", "programador", "engenharia de software", "arquitetura de software", "infraestrutura de ti", 
     "suporte de ti", "analista de ti", "cientista de dados", "inteligencia artificial", "ciencia de dados", "aprendizado de maquina",
@@ -23,7 +30,7 @@ CARGOS_TI = [
 TERMOS_EXCLUIR = [
     "informatica basica", "nocoes de informatica", "informatica para iniciantes", "conceitos de informatica", 
     "conhecimentos em informatica", "cursos de informatica", ", informatica", "informatica nivel basico", 
-    "informatica nivel iniciante", "informatica fundamental", "nivel basico em informatica",
+    "informatica nivel iniciante", "informatica fundamental", "nivel basico em informatica", "; informatica",
     "basico em informatica", "basico de informatica", "basicos em informatica", "basicos de informatica", 
     "iniciante em informatica", "iniciante de informatica"
 ]
