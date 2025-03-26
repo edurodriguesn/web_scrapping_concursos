@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Concursos de TI</title>
+</head>
+<body>
+    <h1>Concursos de TI</h1>
+    <ul>
+        {% for concurso in concursos %}
+        <li>
+            <strong>{{ concurso.titulo }}</strong> - {{ concurso.estado }} ({{ concurso.data_concurso|date:"d/m/Y" }})
+            {% if concurso.novo %}<span style="color: red;">[NOVO]</span>{% endif %}
+            <br>
+            <a href="{{ concurso.link }}" target="_blank">Ver concurso</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

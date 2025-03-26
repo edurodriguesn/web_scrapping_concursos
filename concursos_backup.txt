@@ -1,5 +1,4 @@
 [NACIONAL]
-https://www.pciconcursos.com.br/noticias/cnen-retifica-concurso-publico-com-150-vagas
 https://www.pciconcursos.com.br/noticias/stm-retifica-concurso-publico-com-80-vagas-para-nivel-superior
 https://www.pciconcursos.com.br/noticias/nav-brasil-divulga-edital-de-processo-seletivo
 
@@ -7,6 +6,7 @@ https://www.pciconcursos.com.br/noticias/nav-brasil-divulga-edital-de-processo-s
 https://www.pciconcursos.com.br/noticias/camara-de-mariana-mg-lanca-concurso-para-diversos-niveis-de-escolaridade
 https://www.pciconcursos.com.br/noticias/camara-municipal-de-uberaba-mg-retifica-edital-de-concurso-publico
 https://www.pciconcursos.com.br/noticias/prefeitura-de-serrania-mg-retifica-dois-concursos-publicos-com-47-vagas
+https://www.pciconcursos.com.br/noticias/camara-de-piedade-de-caratinga-mg-divulga-concurso-publico-com-salarios-de-ate-4-7-mil
 https://www.pciconcursos.com.br/noticias/prefeitura-de-itanhandu-mg-informa-abertura-de-processo-seletivo-para-cargos-de-nivel-superior
 https://www.pciconcursos.com.br/noticias/prefeitura-de-marlieria-mg-divulga-70-vagas-em-novo-concurso-publico
 https://www.pciconcursos.com.br/noticias/edital-de-processo-seletivo-e-divulgado-pela-prefeitura-de-rio-pomba-mg
@@ -25,6 +25,7 @@ https://www.pciconcursos.com.br/noticias/prefeitura-de-videira-sc-retifica-um-do
 
 [GO]
 https://www.pciconcursos.com.br/noticias/prefeitura-de-trindade-go-prorroga-inscricoes-de-processo-seletivo-com-137-vagas
+https://www.pciconcursos.com.br/noticias/idtech-go-promove-26-vagas-em-novo-processo-seletivo
 https://www.pciconcursos.com.br/noticias/prefeitura-de-goianira-go-abre-62-vagas-em-processo-seletivo
 https://www.pciconcursos.com.br/noticias/prefeitura-de-santa-barbara-de-goias-go-abre-67-vagas-em-novo-processo-seletivo
 
@@ -32,6 +33,5 @@ https://www.pciconcursos.com.br/noticias/prefeitura-de-santa-barbara-de-goias-go
 https://www.pciconcursos.com.br/noticias/crm-ms-informa-abertura-de-edital-de-concurso-publico-para-a-cidade-de-campo-grande
 
 [MT]
-https://www.pciconcursos.com.br/noticias/prefeitura-de-itiquira-mt-retifica-processo-seletivo-com-salarios-de-ate-14-2-mil
 https://www.pciconcursos.com.br/noticias/seplag-mt-abre-vagas-para-analistas-de-tecnologia-da-informacao
 

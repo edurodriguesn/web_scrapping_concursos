@@ -122,3 +122,32 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CONCURSOS_CONFIG = {
+    'ARQUIVO_BACKUP': 'concursos_backup.txt',
+    'TOKEN_BOT': '7829942554:AAFuapRP-53eW0o54IOG7f3PavZr-jIH30U',
+    'CHAT_ID': 2081844601,
+    'ESTADOS_INTERESSE': ["AP", "PA", "GO", "MT", "MS", "PB", "MG", "SC", "RS", "PR", "NACIONAL"],
+    'CARGOS_TI': [
+        "tecnologia da informacao", "informatica", "analista de sistema", "analise de sistema", "analise em sistema",  
+        "arquiteto de sistema", "arquitetura de sistema", "engenheiro de sistema", "engenharia de sistema", "especialista em sistema", "especialidade em sistema",  
+        "gerente de sistema", "gerenciamento de sistema", "gestao de sistema", "coordenador de sistema", "coordenacao de sistema",  
+        "tecnico de sistema", "tecnica de sistema", "consultor de sistema", "consultoria de sistema", "administrador de sistema", "administracao de sistema",  
+        "suporte de sistema",  "testador de sistema", "testes de sistema", "testagem de sistema",  "sistemas",
+        "auditor de sistema", "auditoria de sistema",  "operador de sistema", "operacao de sistema",  "cientista de sistema", "ciencia de sistema",  
+        "líder de sistema", "liderança de sistema", "computacao", "desenvolvimento de", "analisa de desenvolvimento", 
+        "tecnico em desenvolvimento", "especialista em desenvolvimento", "engenheiro de desenvolvimento", "desenvolvedor", "seguranca da informacao", "banco de dados", 
+        "redes", "suporte tecnico", "programacao", "programador", "engenharia de software", "arquitetura de software", "infraestrutura de ti", 
+        "suporte de ti", "analista de ti", "cientista de dados", "inteligencia artificial", "ciencia de dados", "aprendizado de maquina",
+        "governanca de ti", "gestao de projetos de ti", "gestao de riscos de ti", "computacao em nuvem", "forense digital", "tecnologista", "tecnologic",
+        "big data", "automacao", "devops", "analise de dados", "analista de dados", "ciencia e tecnologia"
+    ],
+    'TERMOS_EXCLUIR': [
+        "informatica basica", "nocoes de informatica", "informatica para iniciantes", "conceitos de informatica", 
+        "conhecimentos em informatica", "cursos de informatica", ", informatica", "informatica nivel basico", 
+        "informatica nivel iniciante", "informatica fundamental", "nivel basico em informatica", "; informatica",
+        "basico em informatica", "basico de informatica", "basicos em informatica", "basicos de informatica", 
+        "iniciante em informatica", "iniciante de informatica"
+    ],
+    'URL_BASE_PCI': "https://www.pciconcursos.com.br/concursos/"
+}
