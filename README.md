@@ -1,35 +1,12 @@
-# Web Scrapping de Concursos de TI
-## Objetivo
-- Informar sobre novos concursos públicos da área de TI
+# React + Vite
 
-## Funcionamento
-- Faz web scrapping em site de concurso, filtrando pela área de TI
-- Organiza os resultados em um arquivo txt
-- Envia os resultados através de um bot no telegram
-- Para melhor funcionamento é recomendado agendar execução diária ou semanal, garantindo atualizações constantes
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Instalação
-- Primeramente certifique-se de que possui python instalado
-### 0 - Ativar ambiente virtual de execução (Linux)
-``` bash
-source env.sh
-```
-### 1 - Instalar dependências
-``` bash
-pip install -r requirements.txt
-```
+Currently, two official plugins are available:
 
-## Execução
-``` bash
-python3 main.py
-```
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
----
-### Melhorias e Correções Futuras
-- Adicionar mais sites de concurso
-- Melhorar o sistema de notificação
-- Otimizar segurança (relacionado ao bot do Telegram)
+## Expanding the ESLint configuration
 
----
-💡 Este projeto foi desenvolvido com o auxílio de IA para otimizar código e estrutura.  
-Sinta-se à vontade para contribuir!
+If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
