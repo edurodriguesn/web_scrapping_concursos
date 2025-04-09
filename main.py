@@ -5,7 +5,6 @@ from datetime import datetime
 import unicodedata
 
 # Configurações
-ARQUIVO_BACKUP = "concursos_backup.txt"
 TOKEN_BOT = "7829942554:AAFuapRP-53eW0o54IOG7f3PavZr-jIH30U"
 CHAT_ID = 2081844601
 
@@ -87,24 +86,22 @@ def main():
                         concursos_encontrados[estado] = []
                     concursos_encontrados[estado].append(link)
     
-    concursos_atuais, concursos_novos = organizador.organizar_dados(concursos_encontrados, ARQUIVO_BACKUP)
+    concursos_atuais, concursos_novos = organizador.organizar_dados(concursos_encontrados)
     
-    mensagem_telegram = ""
-    if concursos_atuais:
-        for estado, links in concursos_atuais.items():
+    # Só envia mensagem se houver concursos novos
+    if concursos_novos:
+        mensagem_telegram = "NOVOS CONCURSOS ENCONTRADOS\n\n"
+        
+        for estado, links in concursos_novos.items():
             mensagem_telegram += f"[{estado}]\n"
             for link in links:
-                if estado in concursos_novos and link in [l.replace(" [!]", "") for l in concursos_novos[estado]]:
-                    mensagem_telegram += f"- {link} [!]\n"
-                else:
-                    mensagem_telegram += f"- {link}\n"
+                mensagem_telegram += f"- {link}\n"
             mensagem_telegram += "\n"
-    
-    if mensagem_telegram:
-        print("Concursos encontrados. Enviando mensagem no Telegram...")
+        
+        print("Novos concursos encontrados. Enviando mensagem no Telegram...")
         enviar_telegram(mensagem_telegram.strip())
     else:
-        print("Nenhuma alteração nos concursos.")
+        print("Nenhum novo concurso encontrado.")
 
 
 if __name__ == "__main__":

@@ -1,52 +1,62 @@
-import os
+from database import get_db_connection, init_db
 
-def ler_backup_concursos(arquivo_backup):
-    """Lê os concursos salvos no backup e retorna um dicionário."""
+def ler_backup_concursos():
+    """Lê os concursos salvos no banco de dados e retorna um dicionário."""
     concursos_backup = {}
     
-    if not os.path.exists(arquivo_backup):
-        return concursos_backup
-
-    with open(arquivo_backup, "r", encoding="utf-8") as arquivo:
-        estado_atual = None
-        for linha in arquivo:
-            linha = linha.strip()
-            if linha.startswith("[") and linha.endswith("]"):
-                estado_atual = linha.strip("[]")
-                concursos_backup[estado_atual] = []
-            elif estado_atual and linha:
-                concursos_backup[estado_atual].append(linha)
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT estado, link FROM concursos")
+        for estado, link in cursor.fetchall():
+            if estado not in concursos_backup:
+                concursos_backup[estado] = []
+            concursos_backup[estado].append(link)
     
     return concursos_backup
 
 
-def salvar_backup_concursos(arquivo_backup, concursos):
-    """Salva os concursos no arquivo de backup."""
-    with open(arquivo_backup, "w", encoding="utf-8") as arquivo:
+def salvar_backup_concursos(concursos):
+    """Salva os concursos no banco de dados."""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        # Limpa a tabela antes de inserir novos dados (opcional)
+        cursor.execute("DELETE FROM concursos")
+        
         for estado, links in concursos.items():
-            arquivo.write(f"[{estado}]\n")
-            arquivo.write("\n".join(links) + "\n\n")
+            for link in links:
+                try:
+                    cursor.execute(
+                        "INSERT INTO concursos (estado, link) VALUES (?, ?)",
+                        (estado, link)
+                    )
+                except sqlite3.IntegrityError:
+                    # Ignora duplicatas (devido à constraint UNIQUE)
+                    pass
+        
+        conn.commit()
 
 
-def organizar_dados(concursos_encontrados, arquivo_backup):
-    """Compara os concursos encontrados com o backup e retorna os atuais e os novos."""
-    concursos_backup = ler_backup_concursos(arquivo_backup)
+def organizar_dados(concursos_encontrados):
+    """Compara os concursos encontrados com o banco e retorna os atuais e os novos."""
+    init_db()
+    concursos_backup = ler_backup_concursos()
     
     concursos_atuais = {}
     concursos_novos = {}
 
     for estado, links in concursos_encontrados.items():
-        concursos_atuais[estado] = links  # Todos os encontrados são considerados "atuais"
+        concursos_atuais[estado] = links
         
         # Identificar os novos
-        links_atuais = set(concursos_backup.get(estado, []))
+        links_backup = set(concursos_backup.get(estado, []))
         links_encontrados = set(links)
-        novos_links = links_encontrados - links_atuais
+        novos_links = links_encontrados - links_backup
         
         if novos_links:
-            concursos_novos[estado] = [f"{link} [!]" for link in novos_links]
+            concursos_novos[estado] = list(novos_links)
 
-    # Atualiza o arquivo de backup
-    salvar_backup_concursos(arquivo_backup, concursos_atuais)
+    # Atualiza o banco de dados apenas se houver alterações
+    if concursos_novos:
+        salvar_backup_concursos(concursos_atuais)
 
     return concursos_atuais, concursos_novos
