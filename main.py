@@ -3,10 +3,11 @@ import organizar_resultado as organizador
 import requests
 from datetime import datetime
 import unicodedata
+import os
 
 # Configurações
-TOKEN_BOT = "7829942554:AAFuapRP-53eW0o54IOG7f3PavZr-jIH30U"
-CHAT_ID = 2081844601
+TOKEN_BOT = os.getenv('TOKEN_BOT')
+CHAT_ID = os.getenv('CHAT_ID')
 
 ESTADOS_INTERESSE = ["AP", "PA", "GO", "MT", "MS", "PB", "MG", "SC", "RS", "PR", "NACIONAL"]
 
