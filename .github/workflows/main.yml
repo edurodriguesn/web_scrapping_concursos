@@ -1,25 +1,68 @@
-name: Executar script diariamente
+name: Scraper de Concursos TI
 
 on:
   schedule:
-    - cron: '0 08 * * *' 
-  workflow_dispatch: 
+    - cron: '0 21 * * *'  # Executa diariamente às 09:00 BRT (12:00 UTC)
+  workflow_dispatch:       # Permite execução manual
 
 jobs:
-  run_script:
+  run-scraper:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Clonar repositório
-        uses: actions/checkout@v3
+    # Passo 1: Checkout do código
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false  # Importante para o push posterior
+        
+    # Passo 2: Configuração do cache do banco de dados
+    - name: Cache database
+      id: cache-db
+      uses: actions/cache@v3
+      with:
+        path: concursos.db
+        key: db-${{ github.ref }}-${{ github.sha }}
+        restore-keys: |
+          db-${{ github.ref }}-
+          db-
 
-      - name: Configurar Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+    # Passo 3: Configuração do Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    # Passo 4: Instalação de dependências
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 sqlite3
 
-      - name: Instalar dependências
-        run: |
-          pip install -r requirements.txt
-
-      - name: Executar script
-        run: python main.py 
+    # Passo 5: Execução do scraper
+    - name: Run scraper
+      run: python main.py
+      env:
+        TOKEN_BOT: ${{ secrets.TOKEN_BOT }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        
+    # Passo 6: Persistência das alterações no banco de dados
+    - name: Commit and push database changes
+      if: always()  # Executa mesmo se o passo anterior falhar
+      run: |
+        # Configura o git
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+        # Verifica se houve mudanças no banco
+        git status
+        git diff --exit-code concursos.db || CHANGES=true
+        
+        if [[ $CHANGES ]]; then
+          git add concursos.db
+          git commit -m "[Automated] Update database - $(date +'%Y-%m-%d %H:%M')"
+          git pull --rebase  # Atualiza antes de enviar
+          git push
+          echo "Database updated successfully"
+        else
+          echo "No changes in database"
+        fi
