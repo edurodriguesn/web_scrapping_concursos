@@ -65,7 +65,7 @@ jobs:
           git pull --rebase
 
           # Atualiza a URL remota para autenticar com GITHUB_TOKEN
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${{ secrets.TOKEN_GITHUB }}@github.com/${{ github.repository }}
           git push
 
           echo "Database updated successfully"
