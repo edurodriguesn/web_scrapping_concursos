@@ -1,4 +1,6 @@
 import requests
+import os
+
 
 # Função para enviar mensagem no Telegram
 def enviar_telegram(message, token, chat_id):
@@ -11,9 +13,9 @@ def enviar_telegram(message, token, chat_id):
     print(response.text)  # Exibe a resposta para verificar se deu certo
     return response
 
-# Teste de envio
-token_bot = "7829942554:AAFuapRP-53eW0o54IOG7f3PavZr-jIH30U"
-chat_id = 2081844601  # Substitua pelo seu chat_id correto
+# Configurações
+TOKEN_BOT = os.getenv('TOKEN_BOT')
+CHAT_ID = os.getenv('CHAT_ID')
 mensagem = "Teste de envio de mensagem para o bot do Telegram!"
 
 # Envia a mensagem
