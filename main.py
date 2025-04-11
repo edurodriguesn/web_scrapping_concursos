@@ -4,6 +4,10 @@ import requests
 from datetime import datetime
 import unicodedata
 import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis do arquivo .env
+load_dotenv()
 
 # Configurações
 TOKEN_BOT = os.getenv('TOKEN_BOT')
