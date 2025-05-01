@@ -69,7 +69,7 @@ def main():
         data_concurso = concurso.find("div", class_="ce")
         span_text = data_concurso.find("span").get_text(strip=True)
         
-        if "Suspenso" in span_text or "Cancelado" in span_text:
+        if not span_text[0].isdigit():
             continue
         
         data_concurso = extrair_data(span_text)
