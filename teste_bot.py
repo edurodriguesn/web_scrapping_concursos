@@ -1,11 +1,6 @@
 import requests
 import os
-from dotenv import load_dotenv
 
-# Carrega as variáveis do arquivo .env
-load_dotenv()
-
-# Função para enviar mensagem no Telegram
 def enviar_telegram(message, token, chat_id):
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     params = {
@@ -16,12 +11,14 @@ def enviar_telegram(message, token, chat_id):
     print(response.text)  # Exibe a resposta para verificar se deu certo
     return response
 
-# Configurações
+# Pegando as variáveis do ambiente (funciona tanto no local quanto no GitHub Actions)
 token_bot = os.getenv('TOKEN_BOT')
 chat_id = os.getenv('CHAT_ID')
 mensagem = "Teste de envio de mensagem para o bot do Telegram!"
 
+# Debug opcional
+print(f"TOKEN_BOT: {token_bot}")
+print(f"CHAT_ID: {chat_id}")
+
 # Envia a mensagem
-
 enviar_telegram(mensagem, token_bot, chat_id)
-
