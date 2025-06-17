@@ -35,7 +35,7 @@ TERMOS_EXCLUIR = [
     "conhecimentos em informatica", "cursos de informatica", ", informatica", "informatica nivel basico", 
     "informatica nivel iniciante", "informatica fundamental", "nivel basico em informatica", "; informatica",
     "basico em informatica", "basico de informatica", "basicos em informatica", "basicos de informatica", 
-    "iniciante em informatica", "iniciante de informatica"
+    "iniciante em informatica", "iniciante de informatica", "nocoes gerais de informatica", "questoes de informatica"
 ]
 
 
