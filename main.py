@@ -6,6 +6,11 @@ import unicodedata
 import os
 from dotenv import load_dotenv
 import re
+from transformers import pipeline
+
+# Carrega o classificador zero-shot uma vez
+classificador_ti = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+
 
 # Carrega as variáveis do arquivo .env
 load_dotenv()
@@ -15,6 +20,21 @@ TOKEN_BOT = os.getenv('TOKEN_BOT')
 CHAT_ID = os.getenv('CHAT_ID')
 
 ESTADOS_INTERESSE = ["AP", "PA", "GO", "MT", "MS", "PB", "MG", "SC", "RS", "PR", "NACIONAL"]
+
+PALAVRAS_TI_CERTAS = [
+    "analista de sistema", "analise de sistema", "tecnologia da informacao", 
+    "infraestrutura de ti", "cientista de dados", "engenheiro de software", "ciencia de dados",
+    "seguranca da informacao", "programador", "programacao", "desenvolvedor",
+    "inteligencia artificial", "devops", "administrador de sistema",
+    "analista de ti", "desenvolvimento de software", "desenvolvimento de sistema",
+    "ciencia da computacao", "tecnico de informatica", "redes de computadores"
+]
+
+PALAVRAS_TI_POTENCIAIS = [
+    "informatica", "desenvolvimento", "suporte", "sistema", "computacao", 
+    "dados", "automacao", "tecnologia", "rede", "banco de dados", 
+    "infraestrutura", "software", "hardware"
+]
 
 CARGOS_TI = [
     "tecnologia da informacao", "informatica", "analista de sistema", "analise de sistema", "analise em sistema",  
@@ -31,13 +51,31 @@ CARGOS_TI = [
     "big data", "automacao", "devops", "analise de dados", "analista de dados", "ciencia e tecnologia", "desenvolvimento de software", "desenvolvimento de sistema",
 ]
 
-TERMOS_EXCLUIR = [
-    "informatica basica", "nocoes de informatica", "informatica para iniciantes", "conceitos de informatica", 
-    "conhecimentos em informatica", "cursos de informatica", ", informatica", "informatica nivel basico", 
-    "informatica nivel iniciante", "informatica fundamental", "nivel basico em informatica", "; informatica",
-    "basico em informatica", "basico de informatica", "basicos em informatica", "basicos de informatica", 
-    "iniciante em informatica", "iniciante de informatica", "nocoes gerais de informatica", "questoes de informatica"
-]
+def eh_vaga_ti(texto):
+    """Classifica se o texto indica vaga de TI com base em palavras-chave e zero-shot."""
+
+    # 1. Palavras específicas: se bater aqui, já retorna True
+    if any(palavra in texto for palavra in PALAVRAS_TI_CERTAS):
+        return True
+
+    # 2. Palavras genéricas: se houver, aplicar zero-shot
+    if any(palavra in texto for palavra in PALAVRAS_TI_POTENCIAIS):
+        labels = [
+            "vaga de tecnologia da informação",
+            "vaga de outra área"
+        ]
+        frases = re.split(r'[.;\n]', texto)
+        for frase in frases:
+            frase = frase.strip()
+            if not frase:
+                continue
+            resultado = classificador_ti(frase, labels)
+            if resultado["labels"][0] == labels[0]:
+                return True
+
+    # 3. Nenhum indício
+    return False
+
 
 def regex_excluir(texto):
     padrao1 = re.compile(r'\bdesenvolvimento de (?!sistema|software|sistemas)\b\w+', re.IGNORECASE)
@@ -82,24 +120,20 @@ def main():
         
         if div_cc:
             estado = div_cc.get_text(strip=True) or "NACIONAL"
-            
+
             if estado in ESTADOS_INTERESSE and hoje.date() <= data_concurso.date():
                 link = concurso.get("data-url")
                 if not link:
                     continue
-                
+
                 detalhes = scraper.obter_detalhes_concurso(link)
                 detalhes = ''.join(c for c in unicodedata.normalize('NFD', detalhes) if unicodedata.category(c) != 'Mn')
 
-                if (
-                    any(cargo in detalhes for cargo in CARGOS_TI)
-                    and not any(termo in detalhes for termo in TERMOS_EXCLUIR)
-                    and not regex_excluir(detalhes)
-                ):
+                if eh_vaga_ti(detalhes):
                     if estado not in concursos_encontrados:
                         concursos_encontrados[estado] = []
                     concursos_encontrados[estado].append(link)
-    
+                    
     concursos_atuais, concursos_novos = organizador.organizar_dados(concursos_encontrados)
     
     # Só envia mensagem se houver concursos novos
