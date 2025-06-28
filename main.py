@@ -5,6 +5,7 @@ from datetime import datetime
 import unicodedata
 import os
 from dotenv import load_dotenv
+import re
 
 # Carrega as variáveis do arquivo .env
 load_dotenv()
@@ -27,7 +28,7 @@ CARGOS_TI = [
     "redes", "suporte tecnico", "programacao", "programador", "engenharia de software", "arquitetura de software", "infraestrutura de ti", 
     "suporte de ti", "analista de ti", "cientista de dados", "inteligencia artificial", "ciencia de dados", "aprendizado de maquina",
     "governanca de ti", "gestao de projetos de ti", "gestao de riscos de ti", "computacao em nuvem", "forense digital", "tecnologista", "tecnologic",
-    "big data", "automacao", "devops", "analise de dados", "analista de dados", "ciencia e tecnologia"
+    "big data", "automacao", "devops", "analise de dados", "analista de dados", "ciencia e tecnologia", "desenvolvimento de software", "desenvolvimento de sistema",
 ]
 
 TERMOS_EXCLUIR = [
@@ -38,6 +39,10 @@ TERMOS_EXCLUIR = [
     "iniciante em informatica", "iniciante de informatica", "nocoes gerais de informatica", "questoes de informatica"
 ]
 
+def regex_excluir(texto):
+    padrao1 = re.compile(r'\bdesenvolvimento de (?!sistema|software|sistemas)\b\w+', re.IGNORECASE)
+    padrao2 = re.compile(r'\bdesenvolvimento (?!de\b)\w+', re.IGNORECASE)
+    return bool(padrao1.search(texto) or padrao2.search(texto))
 
 # Função para enviar mensagem no Telegram
 def enviar_telegram(mensagem):
@@ -86,7 +91,11 @@ def main():
                 detalhes = scraper.obter_detalhes_concurso(link)
                 detalhes = ''.join(c for c in unicodedata.normalize('NFD', detalhes) if unicodedata.category(c) != 'Mn')
 
-                if any(cargo in detalhes for cargo in CARGOS_TI) and not any(termo in detalhes for termo in TERMOS_EXCLUIR):
+                if (
+                    any(cargo in detalhes for cargo in CARGOS_TI)
+                    and not any(termo in detalhes for termo in TERMOS_EXCLUIR)
+                    and not regex_excluir(detalhes)
+                ):
                     if estado not in concursos_encontrados:
                         concursos_encontrados[estado] = []
                     concursos_encontrados[estado].append(link)
