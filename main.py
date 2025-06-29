@@ -36,21 +36,6 @@ PALAVRAS_TI_POTENCIAIS = [
     "infraestrutura", "software", "hardware"
 ]
 
-CARGOS_TI = [
-    "tecnologia da informacao", "informatica", "analista de sistema", "analise de sistema", "analise em sistema",  
-    "arquiteto de sistema", "arquitetura de sistema", "engenheiro de sistema", "engenharia de sistema", "especialista em sistema", "especialidade em sistema",  
-    "gerente de sistema", "gerenciamento de sistema", "gestao de sistema", "coordenador de sistema", "coordenacao de sistema",  
-    "tecnico de sistema", "tecnica de sistema", "consultor de sistema", "consultoria de sistema", "administrador de sistema", "administracao de sistema",  
-    "suporte de sistema",  "testador de sistema", "testes de sistema", "testagem de sistema",  "sistemas",
-    "auditor de sistema", "auditoria de sistema",  "operador de sistema", "operacao de sistema",  "cientista de sistema", "ciencia de sistema",  
-    "líder de sistema", "liderança de sistema", "computacao", "desenvolvimento de", "analisa de desenvolvimento", 
-    "tecnico em desenvolvimento", "especialista em desenvolvimento", "engenheiro de desenvolvimento", "desenvolvedor", "seguranca da informacao", "banco de dados", 
-    "redes", "suporte tecnico", "programacao", "programador", "engenharia de software", "arquitetura de software", "infraestrutura de ti", 
-    "suporte de ti", "analista de ti", "cientista de dados", "inteligencia artificial", "ciencia de dados", "aprendizado de maquina",
-    "governanca de ti", "gestao de projetos de ti", "gestao de riscos de ti", "computacao em nuvem", "forense digital", "tecnologista", "tecnologic",
-    "big data", "automacao", "devops", "analise de dados", "analista de dados", "ciencia e tecnologia", "desenvolvimento de software", "desenvolvimento de sistema",
-]
-
 def eh_vaga_ti(texto):
     """Classifica se o texto indica vaga de TI com base em palavras-chave e zero-shot."""
     # 1. Palavras específicas: se bater aqui, já retorna True
@@ -94,11 +79,6 @@ def eh_vaga_ti(texto):
                 return True
     # 3. Nenhum indício
     return False
-
-def regex_excluir(texto):
-    padrao1 = re.compile(r'\bdesenvolvimento de (?!sistema|software|sistemas)\b\w+', re.IGNORECASE)
-    padrao2 = re.compile(r'\bdesenvolvimento (?!de\b)\w+', re.IGNORECASE)
-    return bool(padrao1.search(texto) or padrao2.search(texto))
 
 # Função para enviar mensagem no Telegram
 def enviar_telegram(mensagem):
