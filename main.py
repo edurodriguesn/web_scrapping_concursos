@@ -22,7 +22,7 @@ CHAT_ID = os.getenv('CHAT_ID')
 ESTADOS_INTERESSE = ["AP", "PA", "GO", "MT", "MS", "PB", "MG", "SC", "RS", "PR", "NACIONAL"]
 
 PALAVRAS_TI_CERTAS = [
-    "analista de sistema", "analise de sistema", "tecnologia da informacao", "suporte de ti", "analista de ti",
+    "analista de sistema", "analise de sistema", "tecnologia da informacao", "suporte de ti", "auxiliar de ti",
     "infraestrutura de ti", "cientista de dados", "engenheiro de software", "ciencia de dados",
     "seguranca da informacao", "programador", "programacao", "desenvolvedor", "banco de dados",
     "inteligencia artificial", "devops", "administrador de sistema", "computacao", "tecnico em informatica",
