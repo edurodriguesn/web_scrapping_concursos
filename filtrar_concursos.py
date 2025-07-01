@@ -56,8 +56,8 @@ def eh_vaga_ti(texto):
     # 2. Palavras genéricas: se houver, aplicar zero-shot
     if any(p in texto for p in PALAVRAS_TI_POTENCIAIS):
         labels = [
-            "vaga da área de tecnologia da informação",
-            "vaga de outra área"
+            "vaga de trabalho na área de tecnologia da informação",
+            "vaga de trabalho em outra área que não é tecnologia",
         ]
         
         # Separar texto por ponto e quebra de linha
@@ -65,29 +65,38 @@ def eh_vaga_ti(texto):
         
         frases_relevantes = []
         
+        PADROES_CARGO = r'\b(analista|t[eé]cnico|auxiliar|administrador|engenheiro|especialista|desenvolvedor|programador|cientista|coordenador|consultor|instrutor|professor|pesquisador|gerente)\b'
+    
         for fragmento in fragmentos:
             fragmento = fragmento.strip()
             if not fragmento:
                 continue
+            
+            # 2. Seleciona apenas fragmentos que indicam contexto de vaga
+            if re.search(r'\b(vaga|cargo|fun[cç]ão|oportunidade|profiss|pesquisad|analista|t[eé]cnico|auxiliar|engenh|especialista)\b', fragmento, re.IGNORECASE):
                 
-            # Filtrar apenas fragmentos que contenham palavras relacionadas a vaga/cargo
-            if re.search(r'\b(vaga|cargo|funcao|oportunidade|profiss|pesquisad|analista|tecnico|auxiliar|engenh|especialista)\b', fragmento, re.IGNORECASE):
-                # Separar por ponto e vírgula
-                subfrases = fragmento.split(';')
+                # 3. Divide por ponto e vírgula
+                subfrases = re.split(r'[;]', fragmento)
                 
                 for subfrase in subfrases:
                     subfrase = subfrase.strip()
                     if not subfrase:
                         continue
-                    
-                    # Verificar se a subfrase contém pelo menos uma palavra potencial
-                    if any(re.search(rf'\b{re.escape(p)}\b', subfrase, re.IGNORECASE) for p in PALAVRAS_TI_POTENCIAIS):
-                        frases_relevantes.append(subfrase)
-        # Processar as frases relevantes com zero-shot
-        for frase in frases_relevantes:
-            resultado = classificador_ti(frase, labels)
-            if resultado["labels"][0] == labels[0]:
-                return True
+
+                    # 4. Dentro da subfrase, procura padrões de cargo
+                    for match in re.finditer(PADROES_CARGO, subfrase, flags=re.IGNORECASE):
+                        inicio = match.start()
+                        trecho = subfrase[inicio:inicio + 100].strip()
+
+                        # Verifica se esse trecho contém palavras de TI potenciais
+                        if any(re.search(rf'\b{re.escape(p)}\b', trecho, re.IGNORECASE) for p in PALAVRAS_TI_POTENCIAIS):
+                            frases_relevantes.append(trecho)
+            # Processar as frases relevantes com zero-shot
+            for frase in frases_relevantes:
+                print(f"\nFrase: {frase}")
+                resultado = classificador_ti(frase, labels)
+                if resultado["labels"][0] == labels[0] and resultado["scores"][0] > 0.8:
+                    return True
     # 3. Nenhum indício
     return False
 
