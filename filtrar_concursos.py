@@ -93,9 +93,9 @@ def eh_vaga_ti(texto):
                             frases_relevantes.append(trecho)
             # Processar as frases relevantes com zero-shot
             for frase in frases_relevantes:
-                print(f"\nFrase: {frase}")
                 resultado = classificador_ti(frase, labels)
                 if resultado["labels"][0] == labels[0] and resultado["scores"][0] > 0.8:
+                    print(f"Zero-shot: {frase}\n")
                     return True
     # 3. Nenhum indício
     return False
