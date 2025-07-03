@@ -56,8 +56,8 @@ def eh_vaga_ti(texto):
     # 2. Palavras genéricas: se houver, aplicar zero-shot
     if any(p in texto for p in PALAVRAS_TI_POTENCIAIS):
         labels = [
-            "vaga de trabalho na área de tecnologia da informação",
-            "vaga de trabalho em outra área que não é tecnologia",
+            "cargo na área de tecnologia da informação",
+            "cargo em outra área que não é tecnologia",
         ]
         
         # Separar texto por ponto e quebra de linha
@@ -94,8 +94,9 @@ def eh_vaga_ti(texto):
             # Processar as frases relevantes com zero-shot
             for frase in frases_relevantes:
                 resultado = classificador_ti(frase, labels)
+                print(f"Testado: {frase}")
                 if resultado["labels"][0] == labels[0] and resultado["scores"][0] > 0.8:
-                    print(f"Zero-shot: {frase}\n")
+                    print(f"Aprovado Zero-shot: {frase}\n")
                     return True
     # 3. Nenhum indício
     return False
