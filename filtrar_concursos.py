@@ -3,6 +3,7 @@ from datetime import datetime
 import unicodedata
 import re
 from transformers import pipeline
+from deep_translator import GoogleTranslator
 
 # Carrega o classificador zero-shot uma vez
 classificador_ti = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
@@ -26,8 +27,8 @@ PALAVRAS_TI_CERTAS = [
     "sysadmin", "cloud engineer", "service desk",
 
     # Segurança da Informação
-    "seguranca da informacao", "analista de segurança da informação", "cibersegurança",
-    "segurança cibernética", "pentester",
+    "seguranca da informacao", "analista de segurança da informacao", "ciberseguranca",
+    "seguranca cibernetica", "pentester",
 
     # Banco de Dados
     "banco de dados",
@@ -43,8 +44,15 @@ PALAVRAS_TI_CERTAS = [
 
 PALAVRAS_TI_POTENCIAIS = [
     "informatica", "desenvolvimento", "suporte", "sistema", 
-    "dados", "tecnologia", "rede", "telecomunicac",
+    "dados", "tecnologia", "redes", "telecomunicac",
     "infraestrutura", "software", "hardware"
+]
+
+PADROES_TI_REFORCADOS = [
+    r'\bprofessor(?:\s+\w+){0,4}\s+informatica\b',
+    r'\binstrutor(?:\s+\w+){0,4}\s+tecnologia\b',
+    r'\bpesquisador(?:\s+\w+){0,4}\s+(ti|tecnologia)\b',
+    r'\b(analista|engenheiro|tecnico|coordenador|auxiliar)(?:\s+\w+){0,4}\s+(dados|software|rede|sistema|ti)\b'
 ]
 
 def eh_vaga_ti(texto):
@@ -56,8 +64,8 @@ def eh_vaga_ti(texto):
     # 2. Palavras genéricas: se houver, aplicar zero-shot
     if any(p in texto for p in PALAVRAS_TI_POTENCIAIS):
         labels = [
-            "cargo na área de tecnologia da informação",
-            "cargo em outra área que não é tecnologia",
+            "job in the information technology area",
+            "job in an area other than technology"
         ]
         
         # Separar texto por ponto e quebra de linha
@@ -90,11 +98,19 @@ def eh_vaga_ti(texto):
 
                         # Verifica se esse trecho contém palavras de TI potenciais
                         if any(re.search(rf'\b{re.escape(p)}\b', trecho, re.IGNORECASE) for p in PALAVRAS_TI_POTENCIAIS):
+                            if any(re.search(padrao, trecho, re.IGNORECASE) for padrao in PADROES_TI_REFORCADOS):
+                                print(f"Detectado padrão reforçado direto: {trecho}\n")
+                                return True
                             frases_relevantes.append(trecho)
             # Processar as frases relevantes com zero-shot
+
             for frase in frases_relevantes:
-                resultado = classificador_ti(frase, labels)
-                print(f"Testado: {frase}")
+                traducao = GoogleTranslator(source='auto', target='en').translate(frase)
+                traducao = traducao.lower().strip()
+                resultado = classificador_ti(traducao, labels)
+
+                print(f"Testado: {traducao}")
+                
                 if resultado["labels"][0] == labels[0] and resultado["scores"][0] > 0.8:
                     print(f"Aprovado Zero-shot: {frase}\n")
                     return True
