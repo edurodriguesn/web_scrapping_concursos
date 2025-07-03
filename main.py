@@ -5,6 +5,8 @@ import filtrar_concursos
 
 def main():
     print("Buscando concursos...")
+    # adicionarverificador de url no banco de dados e data de vencimento, para evitar acessar urls ja acessadas 
+    # e remover concursos ja encerrados sem acessar o site
     concursos = scraper.obter_concursos()
     concursos_encontrados = filtrar_concursos.filtrar_texto(concursos)
     concursos_atuais, concursos_novos = organizador.organizar_dados(concursos_encontrados)
