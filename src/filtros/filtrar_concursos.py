@@ -1,4 +1,4 @@
-import scraper
+import scraper.scraper as scraper
 from datetime import datetime
 import unicodedata
 import re
@@ -99,7 +99,7 @@ def eh_vaga_ti(texto):
                         # Verifica se esse trecho contém palavras de TI potenciais
                         if any(re.search(rf'\b{re.escape(p)}\b', trecho, re.IGNORECASE) for p in PALAVRAS_TI_POTENCIAIS):
                             if any(re.search(padrao, trecho, re.IGNORECASE) for padrao in PADROES_TI_REFORCADOS):
-                                print(f"Detectado padrão reforçado direto: {trecho}\n")
+                                print(f"Detectado padrão reforçado direto: {trecho}")
                                 return True
                             frases_relevantes.append(trecho)
             # Processar as frases relevantes com zero-shot

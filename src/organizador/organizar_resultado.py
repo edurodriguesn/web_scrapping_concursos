@@ -1,4 +1,4 @@
-from database import get_db_connection, init_db
+from database.database import get_db_connection, init_db
 
 def ler_backup_concursos():
     """Lê os concursos salvos no banco de dados e retorna um dicionário."""

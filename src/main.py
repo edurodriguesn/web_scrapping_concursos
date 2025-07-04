@@ -1,7 +1,7 @@
-import scraper
-import organizar_resultado as organizador
-import enviar_mensagem
-import filtrar_concursos
+import scraper.scraper as scraper
+import organizador.organizar_resultado as organizador
+import mensagens.enviar_mensagem as enviar_mensagem
+import filtros.filtrar_concursos as filtrar_concursos
 
 def main():
     print("Buscando concursos...")
