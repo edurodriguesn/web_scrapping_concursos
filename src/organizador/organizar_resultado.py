@@ -1,3 +1,4 @@
+import sqlite3
 from database.database import get_db_connection, init_db
 
 def ler_backup_concursos():
