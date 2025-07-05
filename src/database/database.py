@@ -1,6 +1,5 @@
 import sqlite3
 from contextlib import contextmanager
-import os
 from pathlib import Path
 
 # Caminho persistente para o banco de dados
@@ -14,6 +13,7 @@ def get_db_connection():
     finally:
         conn.close()
 
+# database.database.py
 def init_db():
     with get_db_connection() as conn:
         cursor = conn.cursor()
@@ -22,6 +22,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             estado TEXT NOT NULL,
             link TEXT NOT NULL,
+            data_expiracao TEXT NOT NULL,
             UNIQUE(estado, link)
         )
         """)
