@@ -1,6 +1,6 @@
 import sqlite3
 from database.database import get_db_connection, init_db
-import datetime
+from datetime import datetime
 def ler_backup_concursos():
     """Lê os concursos salvos no banco de dados e retorna um dicionário."""
     concursos_backup = {}
