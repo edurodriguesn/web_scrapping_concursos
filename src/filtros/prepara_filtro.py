@@ -1,6 +1,6 @@
 # filtros/filtros_db.py
 
-from database.database import get_db_connection
+from database.database import get_db_connection, init_db
 from datetime import datetime
 from utils.data import extrair_data
 
@@ -43,6 +43,7 @@ def remover_concursos_existentes(concursos_html):
     :param concursos_html: Lista de elementos <div> do BeautifulSoup.
     :return: Lista filtrada de elementos <div>.
     """
+    init_db()
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT link FROM concursos")
