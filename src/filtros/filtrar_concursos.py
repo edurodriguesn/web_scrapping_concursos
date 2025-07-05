@@ -3,6 +3,7 @@ from datetime import datetime
 import unicodedata
 import re
 from transformers import pipeline
+from utils.data import extrair_data
 from deep_translator import GoogleTranslator
 
 # Carrega o classificador zero-shot uma vez
@@ -117,46 +118,31 @@ def eh_vaga_ti(texto):
     # 3. Nenhum indício
     return False
 
-def extrair_data(texto):
-    while texto and not texto[-1].isdigit():
-        texto = texto[:-1]
-    for i in range(len(texto) - 10, -1, -1):
-        data_tentativa = texto[i:i+10]
-        if data_tentativa.count("/") == 2:
-            try:
-                return datetime.strptime(data_tentativa, "%d/%m/%Y")
-            except ValueError:
-                continue
-    return None 
-
 def filtrar_texto(concursos):
     concursos_encontrados = {}
-    
+
     for concurso in concursos:
         div_cc = concurso.find("div", class_="cc")
-        data_concurso = concurso.find("div", class_="ce")
-        span_text = data_concurso.find("span").get_text(strip=True)
-        
-        if not span_text[0].isdigit():
-            continue
-        
-        data_concurso = extrair_data(span_text)
-        hoje = datetime.today()
-        
+        data_concurso_div = concurso.find("div", class_="ce")
+        span_text = data_concurso_div.find("span").get_text(strip=True)
+
+        data_concurso = extrair_data(span_text)  # Deve retornar datetime
+
         if div_cc:
             estado = div_cc.get_text(strip=True) or "NACIONAL"
-            
-            if estado in ESTADOS_INTERESSE and hoje.date() <= data_concurso.date():
+
+            if estado in ESTADOS_INTERESSE:
                 link = concurso.get("data-url")
                 if not link:
                     continue
-                
+
                 detalhes = scraper.obter_detalhes_concurso(link)
                 detalhes = ''.join(c for c in unicodedata.normalize('NFD', detalhes) if unicodedata.category(c) != 'Mn')
                 detalhes = detalhes[:1500]
 
-                if (eh_vaga_ti(detalhes)):
+                if eh_vaga_ti(detalhes):
                     if estado not in concursos_encontrados:
                         concursos_encontrados[estado] = []
-                    concursos_encontrados[estado].append(link)
+                    concursos_encontrados[estado].append((link, data_concurso.date().isoformat()))
+
     return concursos_encontrados
