@@ -43,7 +43,7 @@ jobs:
 
     # Passo 5: Execução do scraper
     - name: Run scraper
-      run: python main.py
+      run: python src/main.py
       env:
         TOKEN_BOT: ${{ secrets.TOKEN_BOT }}
         CHAT_ID: ${{ secrets.CHAT_ID }}
