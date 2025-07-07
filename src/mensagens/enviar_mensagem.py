@@ -14,7 +14,7 @@ def formatar_mensagem(concursos_novos):
     
     for estado, links in concursos_novos.items():
         mensagem_telegram += f"[{estado}]\n"
-        for link in links:
+        for link, data in links:
             mensagem_telegram += f"- {link}\n"
         mensagem_telegram += "\n"
     return mensagem_telegram.strip()
