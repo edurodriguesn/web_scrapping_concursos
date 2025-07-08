@@ -1,6 +1,6 @@
 import scraper.scraper as scraper
 import organizador.organizar_resultado as organizador
-import src.mensagens.telegram as telegram
+import mensagens.telegram as telegram
 import filtros.filtrar_concursos as filtrar_concursos
 import filtros.prepara_filtro as prepara_filtro
 
