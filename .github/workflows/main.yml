@@ -3,59 +3,44 @@ name: Scraper de Concursos TI
 on:
   schedule:
     - cron: '0 21 * * *'  # Executa diariamente às 09:00 BRT (12:00 UTC)
-  workflow_dispatch:       # Permite execução manual
+  workflow_dispatch:
 
 permissions:
-  contents: write  # Permissão necessária para push
+  contents: write
 
 jobs:
   run-scraper:
     runs-on: ubuntu-latest
-    
-    steps:
-    # Passo 1: Checkout do código
-    - uses: actions/checkout@v4
-      with:
-        persist-credentials: false  # Importante para o push posterior
-        
-    # Passo 2: Configuração do cache do banco de dados
-    - name: Cache database
-      id: cache-db
-      uses: actions/cache@v3
-      with:
-        path: concursos.db
-        key: db-${{ github.ref }}-${{ github.sha }}
-        restore-keys: |
-          db-${{ github.ref }}-
-          db-
 
-    # Passo 3: Configuração do Python
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-        
-    # Passo 4: Instalação de dependências
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Passo 5: Execução do scraper
     - name: Run scraper
+      id: scraper
       run: python src/main.py
       env:
         TOKEN_BOT: ${{ secrets.TOKEN_BOT }}
         CHAT_ID: ${{ secrets.CHAT_ID }}
-        
-    # Passo 6: Persistência das alterações no banco de dados
+
     - name: Commit and push database changes
-      if: always()  # Executa mesmo se o passo anterior falhar
+      if: steps.scraper.outcome == 'success'
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
 
-        # Verifica mudanças
         git status
         git diff --exit-code concursos.db || CHANGES=true
 
@@ -63,11 +48,8 @@ jobs:
           git add concursos.db
           git commit -m "[Automated] Update database - $(date +'%Y-%m-%d %H:%M')"
           git pull --rebase
-
-          # Atualiza a URL remota para autenticar com GITHUB_TOKEN
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN_GITHUB }}@github.com/${{ github.repository }}
           git push
-
           echo "Database updated successfully"
         else
           echo "No changes in database"
