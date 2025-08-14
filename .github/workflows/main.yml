@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do código
+    - name: Checkout da branch daily-scraper-job
       uses: actions/checkout@v4
       with:
+        ref: daily-scraper-job
         persist-credentials: false
 
     - name: Set up Python
@@ -47,9 +48,9 @@ jobs:
         if [[ $CHANGES ]]; then
           git add concursos.db
           git commit -m "[Automated] Update database - $(date +'%Y-%m-%d %H:%M')"
-          git pull --rebase
+          git pull --rebase origin daily-scraper-job
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN_GITHUB }}@github.com/${{ github.repository }}
-          git push
+          git push origin daily-scraper-job
           echo "Database updated successfully"
         else
           echo "No changes in database"
