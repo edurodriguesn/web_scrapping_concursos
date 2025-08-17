@@ -18,6 +18,7 @@ jobs:
       with:
         ref: daily-scraper-job
         persist-credentials: false
+        token: ${{ secrets.TOKEN_GITHUB }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -28,6 +29,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Verificar se o arquivo de banco existe
+      run: |
+        if [ ! -f "concursos.db" ]; then
+          echo "Arquivo concursos.db não encontrado. Criando arquivo vazio..."
+          touch concursos.db
+        fi
+        echo "Arquivo concursos.db encontrado/ criado"
 
     - name: Run scraper
       id: scraper
@@ -41,17 +50,25 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-
+        
+        # Garantir que estamos na branch correta
+        git checkout daily-scraper-job
+        
+        # Verificar se há mudanças no banco de dados
         git status
         git diff --exit-code concursos.db || CHANGES=true
 
         if [[ $CHANGES ]]; then
+          echo "Mudanças detectadas no banco de dados. Fazendo commit..."
           git add concursos.db
           git commit -m "[Automated] Update database - $(date +'%Y-%m-%d %H:%M')"
-          git pull --rebase origin daily-scraper-job
+          
+          # Configurar credenciais para push
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN_GITHUB }}@github.com/${{ github.repository }}
+          
+          # Fazer push para a branch daily-scraper-job
           git push origin daily-scraper-job
-          echo "Database updated successfully"
+          echo "Database updated successfully on daily-scraper-job branch"
         else
           echo "No changes in database"
         fi
