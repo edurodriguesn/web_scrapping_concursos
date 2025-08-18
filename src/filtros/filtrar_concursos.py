@@ -38,7 +38,7 @@ PALAVRAS_TI_CERTAS = [
     "professor de informatica", "instrutor de tecnologia", "pesquisador em ti",
 
     # Área Geral de ti / Computação
-    "tecnologia da informacao", "area informatica", "computacao", "analista de ti",
+    "tecnologia da informacao", "area informatica", "computacao", "analista de ti", "analista de suporte",
     "tecnico de ti", "especialista em ti", "consultor de ti", "gerente de ti", "tecnico em ti",
     "coordenador de ti", "product owner", "scrum master", "analista funcional", "analista de informatica",
 ]
